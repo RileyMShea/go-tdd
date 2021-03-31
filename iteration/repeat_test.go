@@ -25,5 +25,4 @@ func ExampleRepeat() {
 	repeated := Repeat("b", 4)
 	fmt.Println(repeated)
 	// Output: bbbb
-
 }
