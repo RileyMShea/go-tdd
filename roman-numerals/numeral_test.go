@@ -2,7 +2,6 @@ package nt
 
 import (
 	"fmt"
-	"log"
 	"testing"
 	"testing/quick"
 )
@@ -71,12 +70,21 @@ func TestRomanNumerals(t *testing.T) {
 func TestPropertiesOfConversion(t *testing.T) {
 
 	t.Run("Can't have more than 3 consecutive symbols", func(t *testing.T) {
-		assertion := func(roman string) bool {
-			arabic := ConvertToArabic(roman)
-			log.Println(arabic)
-			return arabic != 0
+		assertion := func(arabic uint16) bool {
+			if arabic > 3999 {
+				return true
+			}
+			t.Log("testing", arabic)
+			roman := ConvertToRoman(arabic)
+			fromRoman := ConvertToArabic(roman)
+			return fromRoman == arabic
 		}
-		tryProperty(t, assertion)
+
+		if err := quick.Check(assertion, &quick.Config{
+			MaxCount: 1000,
+		}); err != nil {
+			t.Error("failed checks", err)
+		}
 
 	})
 
